@@ -7,29 +7,67 @@ namespace TesteDeveloper
     {
         private static void Main(string[] args)
         {
-            //Lista de referências e estoques
             IList<EstoqueProduto> estoqueProdutos = new List<EstoqueProduto>
             {
-                new EstoqueProduto{Referencia = "A2342", SaldoEstoque = 10},
-                new EstoqueProduto{Referencia = "B8765", SaldoEstoque = 4},
-                new EstoqueProduto{Referencia = "C9546", SaldoEstoque = 6},
-                new EstoqueProduto{Referencia = "D7862", SaldoEstoque = 45},
-                new EstoqueProduto{Referencia = "E6423", SaldoEstoque = 7}
+                new EstoqueProduto{Referencia = "Camiseta-PP", SaldoEstoque = 4},
+                new EstoqueProduto{Referencia = "Camiseta-P", SaldoEstoque = 5},
+                new EstoqueProduto{Referencia = "Camiseta-M", SaldoEstoque = 15},
+                new EstoqueProduto{Referencia = "Camiseta-G", SaldoEstoque = 20},
+                new EstoqueProduto{Referencia = "Camiseta-GG", SaldoEstoque = 7}
             };
 
-            //Inicializa classe gestora do estoque
             GerenciadorEstoque gerenciadorEstoque = new GerenciadorEstoque(estoqueProdutos);
 
-            //Verifica disponível da referência A2342 para uma retirada de 10 unidades
-            var estoqueDisponivel = gerenciadorEstoque.EstoqueDisponivel("A2342", 10);
-            Console.WriteLine($"Estoque disponível: {estoqueDisponivel}");
+            bool sair = false;
+            while (!sair)
+            {
+                Console.WriteLine();
+                Console.WriteLine("===== MENU ESTOQUE =====");
+                Console.WriteLine("1 - Consultar saldo");
+                Console.WriteLine("2 - Adicionar estoque");
+                Console.WriteLine("3 - Listar estoque");
+                Console.WriteLine("4 - Sair");
+                Console.Write("Escolha uma opção: ");
 
-            //Busca saldo de estoque da referência A2342
-            var saldo = gerenciadorEstoque.GetSaldo("A2342");
-            Console.WriteLine($"Saldo: {saldo}");
+                var opcao = Console.ReadLine();
 
-            //Imprime o estoque
-            Console.WriteLine(gerenciadorEstoque.ToString());
+                switch (opcao)
+                {
+                    case "1":
+                        Console.Write("Referência: ");
+                        var refConsulta = Console.ReadLine();
+                        var saldo = gerenciadorEstoque.GetSaldo(refConsulta);
+                        Console.WriteLine($"Saldo de {refConsulta}: {saldo}");
+                        break;
+
+                    case "2":
+                        Console.Write("Referência: ");
+                        var refAdicionar = Console.ReadLine();
+                        Console.Write("Quantidade a adicionar: ");
+                        if (int.TryParse(Console.ReadLine(), out int quantidade))
+                        {
+                            gerenciadorEstoque.AdicionarEstoque(refAdicionar, quantidade);
+                            Console.WriteLine("Estoque atualizado!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Quantidade inválida.");
+                        }
+                        break;
+
+                    case "3":
+                        Console.WriteLine(gerenciadorEstoque.ToString());
+                        break;
+
+                    case "4":
+                        sair = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Opção inválida.");
+                        break;
+                }
+            }
         }
     }
 }
